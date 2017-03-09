@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,13 +11,16 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class GameObject extends Entity {
 
+	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	public GameObject(BodyType type, World world, float width, float height) {
 		super(type, world, width, height);
+		objects.add(this);
 	}
 
 	public GameObject(Sprite sprite, BodyType type, World world, float width, float height) {
 		super(type, world, width, height);
 		this.sprite = sprite;
+		objects.add(this);
 	}
 
 	public void render(OrthographicCamera camera, SpriteBatch batch) {
@@ -36,5 +41,6 @@ public class GameObject extends Entity {
 		y = body.getPosition().y;
 
 	}
+	
 
 }

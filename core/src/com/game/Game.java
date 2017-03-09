@@ -17,12 +17,12 @@ public class Game extends ApplicationAdapter {
 	public static float scale;
 	
 	public void create () {
-	    Gdx.graphics.setWindowedMode(1280, 1024);
+	    Gdx.graphics.setWindowedMode(800,600);
 
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		
-		camera = new OrthographicCamera(8,8);
+		camera = new OrthographicCamera(8,6);
 		scale = Gdx.graphics.getHeight() / camera.viewportHeight;
 		//camera.position.set(width*0.5f, height*0.5f, 0);
 		camera.update();

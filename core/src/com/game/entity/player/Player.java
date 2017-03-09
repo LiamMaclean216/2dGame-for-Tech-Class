@@ -30,7 +30,7 @@ public class Player extends Entity {
 
 	public void render(OrthographicCamera camera, SpriteBatch batch) {
 		//sprite.setPosition((body.getPosition().x * Game.scale) - sprite.getWidth() / 2, (body.getPosition().y * Game.scale) - sprite.getHeight() / 2);
-		sprite.setPosition(0,0);
+		sprite.setPosition(100,100);
 		sprite.setSize(100, 100);
 		//sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
 		//sprite.setSize(width * 2, height * 2);
