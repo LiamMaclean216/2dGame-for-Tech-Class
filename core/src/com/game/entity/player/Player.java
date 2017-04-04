@@ -6,55 +6,64 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.Game;
-import com.game.entity.Entity;
+import com.game.entity.GameObject;
 
-public class Player extends Entity {
+public class Player extends GameObject {
 	public float speed = 0.1f;
 	public float jump = 1f;
-	float pw = 0.3f,ph = 1;;
+	float pw = 0.3f, ph = 0.4f;
+
 	public Player(World world) {
-		super(BodyType.DynamicBody, world, 16, 32);
-		super.addBodyDef(0, -ph / 2, pw, 0.1f, 1, 0);
-		super.addBodyDef(0, ph / 2, pw - (2), ph / 2 - (1),1000, 1, 0);
-		sprite = new Sprite(new Texture("res/player.png"));
+		super(new Sprite(new Texture("res/player.png")), BodyType.DynamicBody, world, 16, 32);
+		// super.addBodyDef(0, -ph / 2, pw, 0.1f, 1, 0);
+		super.addBodyDef(0, 0, pw, ph, 1, 1, 0);
 		body.setFixedRotation(true);
-		
-		//setX(100);
-		//setY(100);
+		body.setLinearDamping(5);
 	}
 
 	public void render(OrthographicCamera camera, SpriteBatch batch) {
-		//sprite.setPosition((body.getPosition().x * Game.scale) - sprite.getWidth() / 2, (body.getPosition().y * Game.scale) - sprite.getHeight() / 2);
-		sprite.setPosition(100,100);
-		sprite.setSize(100, 100);
-		//sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
-		//sprite.setSize(width * 2, height * 2);
-		//sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+		sprite.setPosition((x + camera.viewportWidth / 2 - pw / 2 - camera.position.x) * Game.scale,
+				(y + camera.viewportHeight / 2 - ph / 2 - camera.position.y) * Game.scale);
+		sprite.setRotation((float) Math.toDegrees(body.getAngle()));
+		sprite.setSize(ph * 100, pw * 100);
+		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.draw(batch);
 	}
 
 	public void update(OrthographicCamera camera) {
 		x = body.getPosition().x;
 		y = body.getPosition().y;
+		float angle = body.getAngle();
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			y += Math.sin(body.getAngle()) * speed;
+			x += Math.cos(body.getAngle()) * speed;
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			x += speed;
+			angle -= 0.1f;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			x -= speed;
+			angle += 0.1f;
 		}
+
+		body.setTransform(new Vector2(x, y), angle);
+		Game.camera.position.set(new Vector2(x,y), 0);
+		Game.camera.update();
+	}
+	
+	public double[] getVertices() {
+		if(sprite!=null){
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			body.applyLinearImpulse(new Vector2(0,body.getMass()*jump), body.getWorldCenter(), false);
-			
+			double[] vert = super.getVertices();
+			for(int i = 0;i < vert.length;i+=2) {
+				vert[i] += Game.camera.position.x*Game.scale;
+				vert[i+1] += Game.camera.position.y*Game.scale;
+			}
+			return vert;
 		}
-		//body.setLinearVelocity(xm, ym);
-		
-		
-		body.setTransform(new Vector2(x, y),body.getTransform().getRotation());
+		return new double[0];
 	}
 }

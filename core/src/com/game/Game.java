@@ -9,7 +9,7 @@ import com.game.states.StateManager;
 
 public class Game extends ApplicationAdapter {
 	private Play play;
-	private OrthographicCamera camera;
+	public static OrthographicCamera camera;
 
 	public static int width;
 	public static int height;
@@ -21,10 +21,8 @@ public class Game extends ApplicationAdapter {
 
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		
 		camera = new OrthographicCamera(8,6);
 		scale = Gdx.graphics.getHeight() / camera.viewportHeight;
-		//camera.position.set(width*0.5f, height*0.5f, 0);
 		camera.update();
 		
 		play = new Play();
