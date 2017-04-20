@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.game.Game;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class GameObject extends Entity {
 
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
-
+	private boolean toDestroy = false;
 	public GameObject(BodyType type, World world, float width, float height) {
 		super(type, world, width, height);
 		objects.add(this);
@@ -21,6 +22,7 @@ public class GameObject extends Entity {
 	public GameObject(Sprite sprite, BodyType type, World world, float width, float height) {
 		super(type, world, width, height);
 		this.sprite = sprite;
+
 		objects.add(this);
 
 	}
@@ -33,9 +35,9 @@ public class GameObject extends Entity {
 			// && sprite.getY() == body.getPosition().y - sprite.getHeight() /
 			// 2)
 			sprite.draw(batch);
+			if (body != null)
+				sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
 		}
-		if (body != null)
-			sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
 	}
 
 	public void update(OrthographicCamera camera) {
@@ -61,10 +63,21 @@ public class GameObject extends Entity {
 				verts[i] = newX;
 				verts[i + 1] = newY;
 			}
+			for (int i = 0; i < verts.length; i += 2) {
+				verts[i] += Game.camera.position.x * Game.scale;
+				verts[i + 1] += Game.camera.position.y * Game.scale;
+			}
 			return verts;
 
 		}
 		return new double[0];
 	}
+	public void destroy() {
+		toDestroy = true;
+	}
 
+	public boolean isToDestroy() {
+		return toDestroy;
+	}
+	
 }

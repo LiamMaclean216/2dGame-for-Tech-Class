@@ -1,5 +1,6 @@
 package com.game.entity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.badlogic.gdx.graphics.Mesh;
@@ -14,9 +15,16 @@ import com.game.math.MyMath;
 
 public class Light {
 	private Vector2 pos = new Vector2(0,0);
-	private Vector3 attenuation = new Vector3(0,50000,50000), color = new Vector3(0,0,0);;
+	private Vector3 attenuation = new Vector3(0,50000,50000), color = new Vector3(0,0,0);
+	public static ArrayList<Light> lights = new ArrayList<Light>();
 	//public Mesh mesh;
+	public boolean toDestroy = false;
 	public Light() {
+		lights.add(this);
+	}
+	public Light(float x,float y) {
+		lights.add(this);
+		setPos(x,y);
 	}
 	
 	public double[] generateShadow(double[] vertices,OrthographicCamera camera) {
@@ -117,6 +125,11 @@ public class Light {
         return mesh;
 	}
 	
+	public void destroy() {
+		lights.remove(this);
+
+		toDestroy = true;
+	}
 
 	public Vector2 getPos() {
 		return pos;
@@ -144,6 +157,9 @@ public class Light {
 
 	public void setColor(Vector3 color) {
 		this.color = color;
+	}
+	public boolean isToDestroy() {
+		return toDestroy;
 	}
 
 }

@@ -19,7 +19,7 @@ public abstract class Entity {
 	protected float width, height;
 	protected float x, y;
 
-	private World world;
+	protected World world;
 	protected FixtureDef circleFixture = new FixtureDef();
 	public boolean flaggedForDelete = false;
 
@@ -38,6 +38,8 @@ public abstract class Entity {
 			body = world.createBody(def);
 			body.getPosition().x = -width;
 			body.getPosition().y = -height;
+			body.setUserData(this);
+
 		}
 		PolygonShape shape = new PolygonShape();
 		shape.set(vertices);
@@ -58,6 +60,8 @@ public abstract class Entity {
 				body = world.createBody(def);
 				body.getPosition().x = -width;
 				body.getPosition().y = -height;
+				body.setUserData(this);
+
 			}
 			PolygonShape shape = new PolygonShape();
 			shape.set(new float[] { x - width, y - height, width * 2 + x - width, y - height, width * 2 + x - width,
@@ -78,6 +82,8 @@ public abstract class Entity {
 			body = world.createBody(def);
 			body.getPosition().x = -radius;
 			body.getPosition().y = -radius;
+			body.setUserData(this);
+
 		}
 		CircleShape shape = new CircleShape();
 		shape.setRadius(radius);

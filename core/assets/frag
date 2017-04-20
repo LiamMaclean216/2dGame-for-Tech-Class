@@ -17,8 +17,8 @@ void main() {
 			distance=distance(pixel.xy ,lightPos[i].xy);
 		
 			float attenuation=(1.0f/(lightAttenuation[i].x+lightAttenuation[i].y*distance+lightAttenuation[i].z*distance*distance));	
-		
-        	color += (texture2D(u_texture, v_texCoords).rgb +vec3(0.4,0.4,0.4)) * vec3(attenuation,attenuation,attenuation) * lightColor[i];
+		 
+        	color += ((texture2D(u_texture, v_texCoords).rgb)) * vec3(attenuation,attenuation,attenuation) * lightColor[i];
 		}
-        gl_FragColor = vec4(color,(color.x+color.y+color.z)/3 + 0.8);
+        gl_FragColor = vec4(color,((color.x+color.y+color.z)/3 + 0.8) * texture2D(u_texture, v_texCoords).a);
 }
